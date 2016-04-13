@@ -6,6 +6,10 @@
 # will call on the GlobalSettings.getController method to resolve the actual controller instance.
 # GET     /                           @controllers.Application.index
 
+# Forum
+GET  		  /forum/getPost 		@controllers.ForumController.getPosts(start: Integer=0, limit: Integer=10)
+PUT           /forum/createPost     @controllers.ForumController.createPost()
+
 # Climate Service
 GET           /climateService/getClimateService/:name/json                                              @controllers.ClimateServiceController.getClimateService(name: String, format: String="json")
 GET           /climateService/getClimateService/id/:id                                                  @controllers.ClimateServiceController.getClimateServiceById(id: Long)
