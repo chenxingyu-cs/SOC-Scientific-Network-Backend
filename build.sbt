@@ -1,4 +1,4 @@
-name := """climate-service-backend"""
+name := """soc-scientific-network-backend"""
 
 version := "1.0-SNAPSHOT"
 
@@ -29,3 +29,6 @@ libraryDependencies ++= Seq(
 
 
 fork in run := false
+
+
+fork in run := true
