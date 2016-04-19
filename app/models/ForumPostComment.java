@@ -13,10 +13,12 @@ public class ForumPostComment {
     private long cid;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="postId")
-    private ForumPost belongToPost;
+    @JoinColumn(name = "postId", referencedColumnName = "postId")
+    private ForumPost postId;
 
-    private long uid;
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private User userId;
 
     @Temporal(TemporalType.DATE)
     private Date timestamp;
@@ -32,17 +34,16 @@ public class ForumPostComment {
 
     }
 
-    public ForumPostComment(long cid, ForumPost belongToPost,
-                            long uid, Date timestamp, String commentTitle,
+    public ForumPostComment(ForumPost belongToPost,
+                            User uid, Date timestamp, String commentTitle,
                             String commentText, String replyTo) {
-
-        this.cid = cid;
-        this.belongToPost = belongToPost;
-        this.uid = uid;
-        this.timestamp = timestamp;
-        this.commentTitle = commentTitle;
-        this.commentText = commentText;
-        this.replyTo = replyTo;
+        super();
+        setPostId(belongToPost);
+        setUserId(uid);
+        setTimestamp(timestamp);
+        setCommentTitle(commentTitle);
+        setCommentText(commentText);
+        setReplyTo(replyTo);
     }
 
 
@@ -54,13 +55,15 @@ public class ForumPostComment {
         this.cid = cid;
     }
 
-    public long getUid() {
-        return uid;
+    public ForumPost getPostId() {
+        return postId;
     }
 
-    public void setUid(long uid) {
-        this.uid = uid;
+    public void setPostId(ForumPost postId) {
+        this.postId = postId;
     }
+
+
 
     public Date getTimestamp() {
         return timestamp;
@@ -94,11 +97,11 @@ public class ForumPostComment {
         this.replyTo = replyTo;
     }
 
-    public ForumPost getBelongToPost() {
-        return belongToPost;
+    public User getUserId() {
+        return userId;
     }
 
-    public void setBelongToPost(ForumPost belongToPost) {
-        this.belongToPost = belongToPost;
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 }

@@ -16,21 +16,20 @@ public class ForumPost {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long postId;
-	private long userId;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "userId", referencedColumnName = "id")
+	private User userId;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
+
 	private String postTitle;
 
 	@Column(columnDefinition = "TEXT")
 	private String postContent;
+
 	private String paperLink;
-
-	@OneToMany(mappedBy = "belongToPost", fetch = EAGER, cascade = CascadeType.ALL)
-	private List<ForumPostRating> ratings;
-
-	@OneToMany(mappedBy = "belongToPost", fetch = EAGER, cascade = CascadeType.ALL)
-	private List<ForumPostComment> comments;
 
 	private long bestCommentId;
 
@@ -46,16 +45,19 @@ public class ForumPost {
 
 	}
 	
-	public ForumPost(long userId, Date timestamp,
-					 String postTitle, String postContent, String paperLink, List<ForumPostComment> comments, long bestCommentId) {
+	public ForumPost(User userId,
+					 Date timestamp,
+					 String postTitle,
+					 String postContent,
+					 String paperLink,
+					 long bestCommentId) {
 		super();
-		this.comments = comments;
-		this.bestCommentId = bestCommentId;
 		setUserId(userId);
 		setTimestamp(timestamp);
 		setPostTitle(postTitle);
 		setPostContent(postContent);
 		setPaperLink(paperLink);
+		setBestCommentId(bestCommentId);
 	}
 
 	public long getPostId() {
@@ -66,11 +68,11 @@ public class ForumPost {
 		this.postId = postId;
 	}
 
-	public long getUserId() {
+	public User getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(User userId) {
 		this.userId = userId;
 	}
 
@@ -96,22 +98,6 @@ public class ForumPost {
 
 	public void setPostContent(String postContent) {
 		this.postContent = postContent;
-	}
-
-	public List<ForumPostRating> getRatings() {
-		return ratings;
-	}
-
-	public void setRatings(List<ForumPostRating> ratings) {
-		this.ratings = ratings;
-	}
-
-	public List<ForumPostComment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<ForumPostComment> comments) {
-		this.comments = comments;
 	}
 
 	public long getBestCommentId() {

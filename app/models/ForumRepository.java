@@ -18,9 +18,9 @@ import java.util.List;
 @Singleton
 public interface ForumRepository extends CrudRepository<ForumPost, Long> {
 
-	@Query(value = "select f.* from enterpriseKG.ForumPost f order by postId desc limit ?2 offset ?1", 
+	@Query(value = "select f.* from ForumPost f order by postId desc limit ?2 offset ?1",
 		nativeQuery = true)
-	public List<ForumPost> getPostsInRange(int start, int limit);
+	List<ForumPost> getPostsInRange(int start, int limit);
 
 	
 }

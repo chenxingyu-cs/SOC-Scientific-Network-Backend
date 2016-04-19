@@ -7,27 +7,29 @@ public class ForumPostRating {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	private long prid;
+	private long rid;
 
 	@ManyToOne (fetch=FetchType.EAGER)
 	@JoinColumn (name="postId")
 	private ForumPost belongToPost;
 
-	private long uid;
+	@ManyToOne (fetch=FetchType.EAGER)
+	@JoinColumn(name = "authorId", referencedColumnName = "id")//using another table is better
+	private User user;
 	private int updown;
 
 	public ForumPostRating() {}
-	public ForumPostRating(long uid, int updown, ForumPost belongToPost) {
+	public ForumPostRating(User user, int updown, ForumPost belongToPost) {
 		super();
-		this.belongToPost = belongToPost;
-		setUid(uid);
+		setBelongToPost(belongToPost);
+		setuser(user);
 		setUpdown(updown);
 	}
-	public long getUid() {
-		return uid;
+	public User getuser() {
+		return user;
 	}
-	public void setUid(long uid) {
-		this.uid = uid;
+	public void setuser(User user) {
+		this.user = user;
 	}
 	public int getUpdown() {
 		return updown;
@@ -36,12 +38,12 @@ public class ForumPostRating {
 		this.updown = updown;
 	}
 
-	public long getPrid() {
-		return prid;
+	public long getRid() {
+		return rid;
 	}
 
-	public void setPrid(long prid) {
-		this.prid = prid;
+	public void setRid(long prid) {
+		this.rid = prid;
 	}
 
 	public ForumPost getBelongToPost() {

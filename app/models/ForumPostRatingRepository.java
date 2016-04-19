@@ -15,13 +15,13 @@ public interface ForumPostRatingRepository extends CrudRepository<ForumPostRatin
     /**
      * Get upvote count for one post
      */
-    @Query (value = "select count(*) from ForumPostRating where pid=?1 and updown=1", nativeQuery = true)
+    @Query (value = "select count(*) from ForumPostRating where postId=?1 and updown=1", nativeQuery = true)
     Integer getUpvoteCount(Long id);
 
     /**
      * Get downvote count for one post
      */
-    @Query (value = "select count(*) from ForumRepository where pid=?1 and updown=-1", nativeQuery = true)
+    @Query (value = "select count(*) from ForumRepository where postId=?1 and updown=-1", nativeQuery = true)
     Integer getDownvoteCount(Long id);
 
 }

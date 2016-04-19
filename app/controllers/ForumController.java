@@ -24,30 +24,56 @@ import java.util.List;
 public class ForumController extends Controller {
     
     private final ForumRepository forumRepository;
+	private final ForumPostCommentRepository forumPostCommentRepository;
 	private final ForumPostRatingRepository forumPostRatingRepository;
+
+	private final UserRepository userRepository;
+	private final PublicationsRepository publicationsRepository;
 
 	@Inject
 	public ForumController(ForumRepository forumRepository,
-                           ForumPostRatingRepository forumPostRatingRepository) {
+                           ForumPostRatingRepository forumPostRatingRepository,
+						   ForumPostCommentRepository forumPostCommentRepository,
+						   UserRepository userRepository,
+						   PublicationsRepository publicationsRepository
+						   ) {
 		this.forumRepository = forumRepository;
         this.forumPostRatingRepository = forumPostRatingRepository;
+		this.forumPostCommentRepository = forumPostCommentRepository;
+		this.userRepository = userRepository;
+		this.publicationsRepository = publicationsRepository;
+
 	}
 
-	public Result createPost () {
+	public Result addNewPost () {
         try {
             JsonNode postNode = request().body().asJson();
-            Long userId = postNode.findPath("userId").asLong();
+			if (postNode == null) {
+				return badRequest("Post not saved, expecting json data.");
+			}
 //            String timestamp = postNode.findPath("timestamp").asText();
-            String postTitle = postNode.findPath("postTitle").asText();
-            String postContent = postNode.findPath("postContent").asText();
-            String paperLink = postNode.findPath("paperLink").asText();
-            ForumPost forumPost = new ForumPost(userId, new Date(),
-                    postTitle, postContent, paperLink, new ArrayList<ForumPostComment>(), 1);
-            ForumPost post = forumRepository.save(forumPost);
-            if (post == null) {
-                return badRequest();
+            String postTitle = postNode.findPath("title").asText();
+            String postContent = postNode.findPath("content").asText();
+            String paperLink = postNode.findPath("link").asText();
+
+			/* Now assume the user is the 1st one */
+			User user = userRepository.findOne(1L);
+
+			/* Now assume the timestamp is the current time */
+			Date timestamp = new Date();
+
+            ForumPost forumPost = new ForumPost(user,
+					timestamp,
+                    postTitle,
+					postContent,
+					paperLink,
+					-1);
+
+            ForumPost savedForumPost = forumRepository.save(forumPost);
+            if (savedForumPost == null) {
+                return badRequest("Forum post is not properly saved.");
             }
-            return created(new Gson().toJson(post.getPostId()));
+            return created(new Gson().toJson(savedForumPost.getPostId()));
         } catch (Exception e) {
             return internalServerError();
         }
@@ -65,13 +91,15 @@ public class ForumController extends Controller {
 
 	public Result vote (Long pid, Long uid, Integer updown) {
         ForumPost post = forumRepository.findOne(pid);
-		ForumPostRating rating = new ForumPostRating(uid, updown, post);
+		User user = userRepository.findOne(uid);
+		ForumPostRating rating = new ForumPostRating(user, updown, post);
 		ForumPostRating response = forumPostRatingRepository.save(rating);
-		return created(new Gson().toJson(response.getPrid()));
+		return created(new Gson().toJson(response.getRid()));
 	}
 
 	public Result getUpvoteCount (Long pid) {
 		Integer count = forumPostRatingRepository.getUpvoteCount(pid);
+
 		return ok(new Gson().toJson(count));
 	}
 
