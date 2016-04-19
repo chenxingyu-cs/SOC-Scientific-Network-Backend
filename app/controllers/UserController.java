@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+
 import models.User;
 import models.UserRepository;
 import play.mvc.Controller;
@@ -30,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.persistence.PersistenceException;
+
 import java.lang.reflect.Modifier;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -57,27 +59,39 @@ public class UserController extends Controller {
 			System.out.println("User not created, expecting Json data");
 			return Common.badRequestWrapper("User not created, expecting Json data");
 		}
+		// Parse JSON file		
+		String userName = json.path("userName").asText();      
+		String password = json.path("password").asText();  
+		String firstName = json.path("firstName").asText();
+		String lastName = json.path("lastName").asText();     
+		String middleInitial = json.path("middleInitial").asText(); 
+		String affiliation = json.path("affiliation").asText(); 
+		String title = json.path("title").asText(); 
+		String email = json.path("email").asText();      
+		String mailingAddress = json.path("mailingAddress").asText(); 
+		String phoneNumber = json.path("phoneNumber").asText();   
+		String faxNumber = json.path("faxNumber").asText(); 
+		String researchFields = json.path("researchFields").asText(); 
+		String highestDegree = json.path("highestDegree").asText(); 
 
-		// Parse JSON file
-		String name = json.path("username").asText();
-		String email = json.path("email").asText();
-		String password = json.path("password").asText();
-		String avatar = json.path("avatar").asText();
+//		String avatar = json.path("avatar").asText();
 
 		try {
 			if (userRepository.findByEmail(email) != null) {
 				System.out.println("Email has been used: " + email);
 				return Common.badRequestWrapper("Email has been used");
 			}
-			User user = new User(name, email, MD5Hashing(password));
-			user.setAvatar(avatar);
+			User user = new User(userName, MD5Hashing(password), firstName,
+					lastName, middleInitial, affiliation, title, email, mailingAddress,
+					 phoneNumber, faxNumber, researchFields, highestDegree);
+//			user.setAvatar(avatar);
 			userRepository.save(user);
 			System.out.println("User saved: " + user.getId());
 			return created(new Gson().toJson(user.getId()));
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
-			System.out.println("User not saved: " + name);
-			return Common.badRequestWrapper("User not saved: " + name);
+			System.out.println("User not saved: " + userName);
+			return Common.badRequestWrapper("User not saved: " + userName);
 		}
 	}
 
@@ -657,5 +671,23 @@ public class UserController extends Controller {
 			return badRequest("User not found");
 		}
 		return ok(result);
+  	}
+
+	public Result isEmailExisted(){
+		JsonNode json = request().body().asJson();
+		if (json == null) {		
+ 			System.out.println("Cannot check email, expecting Json data");		
+ 			return badRequest("Cannot check email, expecting Json data");
+ 		}
+ 	// 	String email = json.path("email").asText();		
+  // 		String result = new String();
+  // 		try {
+  // 			User user = userRepository.findByEmail(email);
+  // 			System.out.println(user);
+  // 			return badRequest("User already have");
+		// } catch (Exception e) {
+		// 	System.out.println("Email can be used");
+		// }
+		return okResponse("Valid Email");
   	}
 }

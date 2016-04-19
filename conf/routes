@@ -180,15 +180,15 @@ PUT           /ConferencePublication/updateBookPublication/id/:id               
 DELETE        /ConferencePublication/deleteBookPublication/id/:id                                       @controllers.ConferencePublicationController.deleteConferencePublication(id: Long)
 
 # Users
-#GET           /users/:id                                                                                @controllers.UserController.getUser(id: Long, format: String="json")
-#POST          /users/add                                                                                @controllers.UserController.addUser
-#PUT           /users/update/:id                                                                         @controllers.UserController.updateUser(id: Long)
-#DELETE        /users/delete/:id                                                                         @controllers.UserController.deleteUser(id: Long)
-#GET		  /users/getAllUsers/json																	@controllers.UserController.getAllUsers(format: String="json")
-#POST		  /users/isUserValid																		@controllers.UserController.isUserValid
-#POST		  /users/isEmailExisted																		@controllers.UserController.isEmailExisted
-POST		  /users/getUserByEmail																		@controllers.UserController.getUserByEmail
-#DELETE		  /users/delete/userName/:userName/password/:password										@controllers.UserController.deleteUserByUserNameandPassword(userName: String, password: String)
+#GET          /users/:id                                                                                @controllers.UserController.getUser(id: Long, format: String="json")
+POST         /users/add                                                                                 @controllers.UserController.userRegister
+#PUT          /users/update/:id                                                                         @controllers.UserController.setProfile(id: Long)
+#DELETE       /users/delete/:id                                                                         @controllers.UserController.deleteUser(id: Long)
+#GET          /users/getAllUsers/json                                                                   @controllers.UserController.getAllUsers(format: String="json")
+POST          /users/isUserValid                                                                        @controllers.UserController.userLogin
+POST         /users/isEmailExisted                                                                     @controllers.UserController.isEmailExisted
+POST          /users/getUserByEmail                                                                     @controllers.UserController.getUserByEmail
+DELETE        /users/delete/userName/:userName/password/:password                                       @controllers.UserController.deleteUserByUserNameandPassword(userName: String, password: String)
 
 # Analytics
 #GET		  /analytics/getAllDatasetAndUserWithCount/json											    @controllers.AnalyticsController.getAllDatasetAndUserWithCount(format: String="json")

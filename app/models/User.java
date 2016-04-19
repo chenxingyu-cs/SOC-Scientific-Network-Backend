@@ -1,6 +1,8 @@
 package models;
 
 import javax.persistence.*;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -24,24 +26,27 @@ public class User {
 	private String highestDegree;
 	private boolean unreadMention;
 
-	//Merged from Team 15&16
+//	@OneToMany(mappedBy = "user", cascade = { CascadeType.ALL })
+//	private Set<ClimateService> climateServices = new HashSet<ClimateService>();
+//
+//	@OneToMany(mappedBy = "fromUser", cascade = { CascadeType.ALL })
+//	private Set<Reply> fromReplies = new HashSet<Reply>();
+//	
+//	@OneToMany(mappedBy = "toUser", cascade = { CascadeType.ALL })
+//	private Set<Reply> toReplies = new HashSet<Reply>();
+	
+	// Merged from Team 15&16
 	private String avatar;
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(	name = "Followers",
-			joinColumns = { @JoinColumn(name ="userId", referencedColumnName = "id")},
-			inverseJoinColumns = { @JoinColumn(name = "followerId", referencedColumnName = "id") })
+	@JoinTable(name = "Followers", joinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "followerId", referencedColumnName = "id") })
 	protected Set<User> followers;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(	name = "friendRequests",
-			joinColumns = { @JoinColumn(name ="userId", referencedColumnName = "id")},
-			inverseJoinColumns = { @JoinColumn(name = "senderId", referencedColumnName = "id") })
+	@JoinTable(name = "friendRequests", joinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "senderId", referencedColumnName = "id") })
 	protected Set<User> friendRequestSender;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(	name = "friendship",
-			joinColumns = { @JoinColumn(name ="userAId", referencedColumnName = "id")},
-			inverseJoinColumns = { @JoinColumn(name = "userBId", referencedColumnName = "id") })
+	@JoinTable(name = "friendship", joinColumns = { @JoinColumn(name = "userAId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "userBId", referencedColumnName = "id") })
 	protected Set<User> friends;
 
 	public User(String userName, String email, String password) {
@@ -50,15 +55,18 @@ public class User {
 		this.password = password;
 	}
 
-	public User(String userName, String password,
-				String email, String phoneNumber) {
+	public User(String userName, String password, String email,
+			String phoneNumber) {
 		super();
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 	}
-	public Set<User> getFollowers(){ return this.followers; }
+
+	public Set<User> getFollowers() {
+		return this.followers;
+	}
 
 	public void setFollowers(Set<User> followers) {
 		this.followers = followers;
@@ -67,16 +75,23 @@ public class User {
 	public void setFriendRequestSender(Set<User> friendRequestSender) {
 		this.friendRequestSender = friendRequestSender;
 	}
-	public Set<User> getFriendRequestSender() {	return this.friendRequestSender;}
 
-	public void setFriends(Set<User> friends) {this.friends = friends;}
+	public Set<User> getFriendRequestSender() {
+		return this.friendRequestSender;
+	}
 
-	public Set<User> getFriends() {return this.friends;}
+	public void setFriends(Set<User> friends) {
+		this.friends = friends;
+	}
 
+	public Set<User> getFriends() {
+		return this.friends;
+	}
 
 	public String toJson() {
 		return "{\"User\":{\"id\":\"" + id + "\", \"userName\":\"" + userName
-				+ "\", \"password\":\"" + password + "\", \"email\":\"" + email + "\", \"avatar\":\"" + avatar
+				+ "\", \"password\":\"" + password + "\", \"email\":\"" + email
+				+ "\", \"avatar\":\"" + avatar
 
 				+ "\", \"phoneNumber\":\"" + phoneNumber + "\"}}";
 	}
@@ -88,12 +103,6 @@ public class User {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
-
-
-
-	// @OneToMany(mappedBy = "user", cascade={CascadeType.ALL})
-	// private Set<ClimateService> climateServices = new
-	// HashSet<ClimateService>();
 
 	public User() {
 	}
@@ -226,7 +235,7 @@ public class User {
 	public void setHighestDegree(String highestDegree) {
 		this.highestDegree = highestDegree;
 	}
-	
+
 	public boolean isUnreadMention() {
 		return unreadMention;
 	}
@@ -248,4 +257,3 @@ public class User {
 	}
 
 }
-
