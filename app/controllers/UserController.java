@@ -195,6 +195,17 @@ public class UserController extends Controller {
 			jsonObject.addProperty("userName", user.getUserName());
 			jsonObject.addProperty("email", user.getEmail());
 			jsonObject.addProperty("avatar", user.getAvatar());
+			jsonObject.addProperty("firstName", user.getFirstName());
+			jsonObject.addProperty("lastName", user.getLastName());
+			jsonObject.addProperty("affiliation", user.getAffiliation());
+			jsonObject.addProperty("title", user.getTitle());
+			jsonObject.addProperty("mailingAddress", user.getMailingAddress());
+			jsonObject.addProperty("phoneNumber", user.getPhoneNumber());
+			jsonObject.addProperty("faxNumber", user.getFaxNumber());
+			jsonObject.addProperty("researchFields", user.getResearchFields());
+			jsonObject.addProperty("highestDegree", user.getHighestDegree());
+			jsonObject.addProperty("subcribers",user.getFollowers().size());
+)
 			result = new Gson().toJson(jsonObject);
 		}
 
@@ -692,16 +703,6 @@ public class UserController extends Controller {
 		 	System.out.println("Something wrong inside isEmailExisted function");
 		}
 		return okResponse("Email does not exist");
-		/*	String email = json.path("email").asText();		
-  		String result = new String();
-  		try {
-  			User user = userRepository.findByEmail(email);
-  			System.out.println(user);
-  			System.out.println(user);
-  			return badRequest("Username used already ");
-		} catch (Exception e) {
-		 	System.out.println("Email can be used");
-		}
-		return okResponse("Valid Email");*/
+
   	}
 }
