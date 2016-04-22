@@ -679,15 +679,29 @@ public class UserController extends Controller {
  			System.out.println("Cannot check email, expecting Json data");		
  			return badRequest("Cannot check email, expecting Json data");
  		}
- 	// 	String email = json.path("email").asText();		
-  // 		String result = new String();
-  // 		try {
-  // 			User user = userRepository.findByEmail(email);
-  // 			System.out.println(user);
-  // 			return badRequest("User already have");
-		// } catch (Exception e) {
-		// 	System.out.println("Email can be used");
-		// }
-		return okResponse("Valid Email");
+ 		String email = json.path("email").asText();		
+
+	    try {
+			if (userRepository.findByEmail(email) != null) {
+				System.out.println("Email exists: " + email);
+				return badRequest("Username used already ");
+				//return Common.badRequestWrapper("Email has been used");
+			}
+				
+		} catch (Exception e) {
+		 	System.out.println("Something wrong inside isEmailExisted function");
+		}
+		return okResponse("Email does not exist");
+		/*	String email = json.path("email").asText();		
+  		String result = new String();
+  		try {
+  			User user = userRepository.findByEmail(email);
+  			System.out.println(user);
+  			System.out.println(user);
+  			return badRequest("Username used already ");
+		} catch (Exception e) {
+		 	System.out.println("Email can be used");
+		}
+		return okResponse("Valid Email");*/
   	}
 }
